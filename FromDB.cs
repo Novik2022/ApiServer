@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
+using ApiServer.Controllers;
 using Npgsql;
 
 namespace ApiServer
@@ -793,12 +794,16 @@ namespace ApiServer
         //Событий за сутки НАЧАЛО
         public int getAlarmCount()
         {
-            int quantity = 1;
-            string Host = "stack.transset.ru";
-            string User = "postgres";
-            string DBname = "dev";
-            string Password = "123";
-            string Port = "30044";
+            int quantity             = 1;
+            string sqlQuery          = string.Empty;
+            string sWorkStartTime    = string.Empty;
+            string sWorkCompleteTime = string.Empty;
+            string Host     = ConnectionSettings.eHost;
+            string User     = ConnectionSettings.eUser;
+            string DBname   = ConnectionSettings.eDBname;
+            string Password = ConnectionSettings.ePassword;
+            string Port     = ConnectionSettings.ePort;
+
             string connString =
                 String.Format(
                     "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
@@ -810,7 +815,7 @@ namespace ApiServer
             var conn = new NpgsqlConnection(connString);
             conn.Open();
             //select count("Id") from "Trs.CiEvent"."CiEvent" where "CreateDate" > DATE_TRUNC('day', NOW()) AND "CreateDate" < 'tomorrow'::timestamp 
-            string sqlQuery = "select count(" + '\u0022' + "Id" + '\u0022' + ")  from " + '\u0022' + "Trs.CiEvent" + '\u0022' + "." + '\u0022' +
+            sqlQuery = "select count(" + '\u0022' + "Id" + '\u0022' + ")  from " + '\u0022' + "Trs.CiEvent" + '\u0022' + "." + '\u0022' +
                 "CiEvent" + '\u0022' + " " + "where " + '\u0022' + "CreateDate" + '\u0022' + "> DATE_TRUNC('day', NOW()) AND " +
                 '\u0022' + "CreateDate" + '\u0022' + " < 'tomorrow'::timestamp";
             var command = new NpgsqlCommand(sqlQuery, conn);
@@ -827,7 +832,7 @@ namespace ApiServer
             }
             reader.Close();
             conn.Close();
-            return quantity;
+            return quantity + 1;
 
         }
         //Событий за сутки КОНЕЦ*/
@@ -835,12 +840,12 @@ namespace ApiServer
         //Получить перевод type
         public string getRU(string ENType)
         {
-            string RUType = string.Empty;
-            string Host = "stack.transset.ru";
-            string User = "postgres";
-            string DBname = "dev";
-            string Password = "123";
-            string Port = "30044";
+            string RUType   = string.Empty;
+            string Host     = ConnectionSettings.eHost;
+            string User     = ConnectionSettings.eUser;
+            string DBname   = ConnectionSettings.eDBname;
+            string Password = ConnectionSettings.ePassword;
+            string Port     = ConnectionSettings.ePort;
             string connString =
                 String.Format(
                     "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",

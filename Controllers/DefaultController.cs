@@ -11,9 +11,20 @@ using System.Web.Http;
 using System.Web.Http.ModelBinding;
 
 namespace ApiServer.Controllers
+
+    
 {
-    public class DefaultController : ApiController
-    {       
+      public class ConnectionSettings
+    {
+        public const string eHost     = "bpo.dev.transset.ru";
+        public const string eUser     = "postgres";
+        public const string eDBname   = "bpo";
+        public const string ePassword = "djkufjvnc";
+        public const string ePort     = "64060";
+    }
+      public class DefaultController : ApiController
+    {    
+       
         [AcceptVerbs("GET")]
         [Route("getIncidentData/{id}")]
         [Route("getChangeRequestList/{id}")]
@@ -260,6 +271,7 @@ namespace ApiServer.Controllers
                     eventData.Id = string.Empty;
                     incorrectAtributNoEvent = true;
                     addErrorType("Ошибка! Id alarm пустой или не существует. Событие не создано.");
+
                 }
                 //проверяем макс длину Id
                 if (eventData.Id.Length>256)

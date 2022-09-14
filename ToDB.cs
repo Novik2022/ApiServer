@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text.Json;
 using System.Web;
+using ApiServer.Controllers;
 using Npgsql;
 
 namespace ApiServer
@@ -198,11 +199,11 @@ namespace ApiServer
             string sqlQuery          = string.Empty;
             string sWorkStartTime    = string.Empty;
             string sWorkCompleteTime = string.Empty;
-            string Host = "stack.transset.ru";
-            string User = "postgres";
-            string DBname   = "dev";
-            string Password = "123";
-            string Port     = "30044";
+            string Host     = ConnectionSettings.eHost;
+            string User     = ConnectionSettings.eUser;
+            string DBname   = ConnectionSettings.eDBname;
+            string Password = ConnectionSettings.ePassword;
+            string Port     = ConnectionSettings.ePort;
 
             string connString =
                 String.Format(
@@ -264,7 +265,7 @@ namespace ApiServer
             //Создать СОБЫТИЕ КОНЕЦ
 
             //Закрыть СОБЫТИЕ НАЧАЛО
-           public int alarmClear(DateTime alarmClearedTime, string clearUserLogin, string clearSystem)
+          /* public int alarmClear(DateTime alarmClearedTime, string clearUserLogin, string clearSystem)
             {
                 string sqlQuery          = string.Empty;
                 string sWorkStartTime    = string.Empty;
@@ -288,7 +289,7 @@ namespace ApiServer
 
 
 
-            }
+            }*/
             //Закрыть СОБЫТИЕ КОНЕЦ
         
 

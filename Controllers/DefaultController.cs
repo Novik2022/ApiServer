@@ -316,6 +316,14 @@ namespace ApiServer.Controllers
                     incorrectAtributGetEvent = true;
                     addErrorType("Некорректное значение probableCause. Заменено на значение по умолчанию Unknown");
                 }
+                //проверяем на соответствие specificProblem
+                if (string.IsNullOrEmpty(eventData.specificProblem) | string.IsNullOrWhiteSpace(eventData.specificProblem))
+                {
+                    eventData.specificProblem = eventData.specificProblem + " @Некорректное значение атрибута specificProblem: " + eventData.specificProblem;
+                    eventData.specificProblem = "informationMissing";
+                    incorrectAtributGetEvent = true;
+                    addErrorType("Некорректное значение specificProblem. Заменено на значение по умолчанию informationMissing");
+                }
                 if (incorrectAtributNoEvent == true) //не создаем событие
                 {
                     modelState.AddModelError("incomingMessage", jsonString);
@@ -333,7 +341,7 @@ namespace ApiServer.Controllers
                     eventData.eventId = sqlQueryResult;
                     return BadRequest(modelState);                   
                 }
-                else 
+                else //создаем Событие без ошибок
                 {
 
                     //Добавляем запись в таблицу Событий

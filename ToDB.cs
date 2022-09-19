@@ -9,7 +9,7 @@ namespace ApiServer
         //Reason НАЧАЛО
         public string setReason(int Reason_Id, int Inc_id)
         {
-            string reason = "";
+            //string reason = "";
             string Host = "mobile.demo.transset.ru";
             string User = "postgres";
             string DBname = "mobile";
@@ -76,7 +76,7 @@ namespace ApiServer
             DateTime WorkStartTime, Int32 Coordinator_Id, DateTime WorkCompleteTime, DateTime ClosedTime, TimeSpan Duration,
             string Result, Int32 Solution_Id, int[] WorkExecutors, bool NeedApproving, DateTime DurationStartDate, DateTime FirstStageUsedInElapsedTime, string CreateUserLogin, string UpdateUserLogin, string DeleteUserLogin, DateTime CreateDate, DateTime UpdateDate, DateTime DeleteDate)
         {
-            const string q = "'\u0022'";
+            //const string q = "'\u0022'";
             string Host = "mobile.demo.transset.ru";
             string User = "postgres";
             string DBname = "itsm";
@@ -180,8 +180,9 @@ namespace ApiServer
 
             var command = new NpgsqlCommand(sqlQuery, conn);
             var query = command.ExecuteNonQuery();
-            return sWorkStartTime;
             conn.Close();
+            return sWorkStartTime;
+            
         }
         //Обновить ЛР ЗИ КОНЕЦ
 
@@ -253,9 +254,10 @@ namespace ApiServer
                 int eventId = reader.GetInt32(0);
                 return eventId;
             }
-            return 0;
             reader.Close();
             conn.Close();
+            return 0;           
+            
         }
             //Создать СОБЫТИЕ КОНЕЦ
 

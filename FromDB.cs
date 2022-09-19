@@ -71,7 +71,7 @@ namespace ApiServer
 
     public class FromDB
     {
-        private object[] values;
+        //private object[] values;
 
         public struct DateTimeWithZone
         {
@@ -485,10 +485,11 @@ namespace ApiServer
 
 
             }
-            return sqlQueryResult;
-
             reader.Close();
             conn.Close();
+            return sqlQueryResult;
+
+
         }
 
         //Реестр запросов на изменение НАЧАЛО

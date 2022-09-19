@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Reflection;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 
@@ -16,19 +11,19 @@ namespace ApiServer.Controllers
 {
       public class ConnectionSettings
     {
-        public const string eHost     = "bpo.dev.transset.ru";
+        public const string eHost     = "bpo.devsr.transset.ru";
         public const string eUser     = "postgres";
         public const string eDBname   = "bpo";
         public const string ePassword = "djkufjvnc";
         public const string ePort     = "64060";
     }
       public class DefaultController : ApiController
-    {    
-       
+    {
+
         [AcceptVerbs("GET")]
         [Route("getIncidentData/{id}")]
         [Route("getChangeRequestList/{id}")]
-        public async Task<IHttpActionResult> getIncidentData(int id)
+        public IHttpActionResult getIncidentData(int id)
         {
             FromDB dbData = new FromDB();
             object sqlQueryResult = dbData.getIncData(id);
@@ -68,7 +63,7 @@ namespace ApiServer.Controllers
 
         [AcceptVerbs("GET")]
         [Route("getIncidentList")]
-        public async Task<IHttpActionResult> getIncList()
+        public IHttpActionResult getIncList()
         {
             FromDB dbData2 = new FromDB();
             var incList = dbData2.getIncList();
@@ -77,7 +72,7 @@ namespace ApiServer.Controllers
 
         [AcceptVerbs("GET")]
         [Route("getChangeRequestList")]
-        public async Task<IHttpActionResult> getChangeRequestList()
+        public IHttpActionResult getChangeRequestList()
         {
             FromDB dbData2 = new FromDB();
             var incList = dbData2.getChangeRequestList();
@@ -86,7 +81,7 @@ namespace ApiServer.Controllers
 
         [AcceptVerbs("GET")]
         [Route("getStages")]
-        public async Task<IHttpActionResult> getStages()
+        public IHttpActionResult getStages()
         {
             FromDB dbData3 = new FromDB();
             var stageList = dbData3.getStages();
@@ -96,7 +91,7 @@ namespace ApiServer.Controllers
 
         [AcceptVerbs("GET")]
         [Route("getRelatedProcess/{Related_Id}")]
-        public async Task<IHttpActionResult> getRelatedProcess(int Related_Id)
+        public IHttpActionResult getRelatedProcess(int Related_Id)
         {
             FromDB dbData4 = new FromDB();
             var RelatedProcess = dbData4.getRelatedProcess(Related_Id);
@@ -107,7 +102,7 @@ namespace ApiServer.Controllers
 
         [AcceptVerbs("GET")]
         [Route("setReason/{Id}/{Reason_Id}")]
-        public async Task<IHttpActionResult> updateReason(int Id, int Reason_Id)
+        public IHttpActionResult updateReason(int Id, int Reason_Id)
 
         {
             ToDB dbData2 = new ToDB();
@@ -180,7 +175,7 @@ namespace ApiServer.Controllers
             public string granularity { get; set; }
             public string direction { get; set; }
             public string thresholdCrossingDescription { get; set; }
-            public string incomingMessage { get; set; }
+            //public string incomingMessage { get; set; }
             //public string errorType { get; set; }
 
         }
@@ -198,7 +193,7 @@ namespace ApiServer.Controllers
         [AcceptVerbs("POST")]
         [Route("updateChangeRequest")]
 
-        public async Task<IHttpActionResult> updateChangeRequest([FromBody] dataCR data)
+        public IHttpActionResult updateChangeRequest([FromBody] dataCR data)
 
         {
             ToDB dbData5 = new ToDB();
@@ -208,7 +203,7 @@ namespace ApiServer.Controllers
 
         [AcceptVerbs("POST")]
         [Route("alarmGroupeCreate")]
-        public async Task<IHttpActionResult> alarmGroupeCreate([FromBody] Events eventsData)
+        public IHttpActionResult alarmGroupeCreate([FromBody] Events eventsData)
 
         {
 
@@ -218,7 +213,7 @@ namespace ApiServer.Controllers
 
         /*  [AcceptVerbs("POST")]
           [Route("setIncidentData")]
-          public async Task<IHttpActionResult> setIncidentData([FromBody] string data)
+          public IHttpActionResult setIncidentData([FromBody] string data)
 
           {
               int[] WorkExecutors = new int[5];
@@ -246,11 +241,11 @@ namespace ApiServer.Controllers
            */
         [AcceptVerbs("POST")]
         [Route("create")]
-        public async Task<IHttpActionResult> create([FromBody] Event eventData)
+        public IHttpActionResult create([FromBody] Event eventData)
 
         {
             string eventNumber = generateEventNumber(); //генерируем номер События
-            bool incorrectAtributNoEvent  = false;      // ошибка когда не создаем событие
+            bool incorrectAtributNoEvent = false;      // ошибка когда не создаем событие
             bool incorrectAtributGetEvent = false;      // ошибка когда создаем событие
             int eventState_Id = 1;                      //стартовый статус
             bool hasTCA = false;                        //наличие вкладки пороги
@@ -258,7 +253,7 @@ namespace ApiServer.Controllers
             string errorType = string.Empty;            //Описание ошибки
             Request request = new Request();
             FromDB fromDB = new FromDB();
-            ToDB dbData6  = new ToDB();
+            ToDB dbData6 = new ToDB();
             //проверяем не пустой ли объект
             if (eventData != null)
             {
@@ -266,7 +261,7 @@ namespace ApiServer.Controllers
                 var modelState = new ModelStateDictionary();
                 //проверяем условие, заполнено ли Id тревожного Сообщения
                 if (string.IsNullOrEmpty(eventData.Id) | string.IsNullOrWhiteSpace(eventData.Id))
-                    
+
                 {
                     eventData.Id = string.Empty;
                     incorrectAtributNoEvent = true;
@@ -274,7 +269,7 @@ namespace ApiServer.Controllers
 
                 }
                 //проверяем макс длину Id
-                if (eventData.Id.Length>256)
+                if (eventData.Id.Length > 256)
                 {
                     incorrectAtributGetEvent = true;
                     addErrorType("Ошибка! Длина Id превышает 256 символов.Событие создано с укороченным идентификатором");
@@ -286,16 +281,16 @@ namespace ApiServer.Controllers
                 //"alarmState", "alarmRaisedTime", "thresholdId", "indicatorName",
                 //"observedValue", "indicatorUnit", "granularity", "direction", "thresholdCrossingDescription")
                 if (string.IsNullOrEmpty(eventData.idCI) | string.IsNullOrWhiteSpace(eventData.idCI))
-                    /*& string.IsNullOrEmpty(eventData.alarmedObjectId) & string.IsNullOrEmpty(eventData.sourceSystem) 
-                    & string.IsNullOrEmpty(eventData.alarmState) & (eventData.alarmRaisedTime==null) & string.IsNullOrEmpty(eventData.thresholdId) &
-                    string.IsNullOrEmpty(eventData.observedValue) & string.IsNullOrEmpty(eventData.indicatorUnit) & string.IsNullOrEmpty(eventData.granularity) &
-                    string.IsNullOrEmpty(eventData.direction) & string.IsNullOrEmpty(eventData.thresholdCrossingDescription))*/
+                /*& string.IsNullOrEmpty(eventData.alarmedObjectId) & string.IsNullOrEmpty(eventData.sourceSystem) 
+                & string.IsNullOrEmpty(eventData.alarmState) & (eventData.alarmRaisedTime==null) & string.IsNullOrEmpty(eventData.thresholdId) &
+                string.IsNullOrEmpty(eventData.observedValue) & string.IsNullOrEmpty(eventData.indicatorUnit) & string.IsNullOrEmpty(eventData.granularity) &
+                string.IsNullOrEmpty(eventData.direction) & string.IsNullOrEmpty(eventData.thresholdCrossingDescription))*/
                 {
                     incorrectAtributNoEvent = true;
                     addErrorType("Ошибка! Некорректное заполнение списка реквизитов");
                 }
                 //проверяем на соответствие тип аварии
-                if (fromDB.getRU(eventData.alarmType)==string.Empty)
+                if (fromDB.getRU(eventData.alarmType) == string.Empty)
                 {
                     eventData.alarmType = "Untyped";
                     incorrectAtributGetEvent = true;
@@ -336,10 +331,10 @@ namespace ApiServer.Controllers
                     modelState.AddModelError("errorType", finalErrorType);
                     //Добавляем запись в таблицу Событий
                     var sqlQueryResult = dbData6.alarmCreate(eventData.Id, eventNumber, eventData.alarmType, fromDB.getRU(eventData.alarmType),
-                    eventData.perceivedSeverity, fromDB.getRU(eventData.perceivedSeverity), 
+                    eventData.perceivedSeverity, fromDB.getRU(eventData.perceivedSeverity),
                     eventData.probableCause, fromDB.getRU(eventData.probableCause), eventData.specificProblem, eventData.alarmDetails, eventData.alarmRaisedTime, eventState_Id, hasTCA, createUserLogin);
                     eventData.eventId = sqlQueryResult;
-                    return BadRequest(modelState);                   
+                    return BadRequest(modelState);
                 }
                 else //создаем Событие без ошибок
                 {
@@ -349,9 +344,9 @@ namespace ApiServer.Controllers
                     eventData.perceivedSeverity, fromDB.getRU(eventData.perceivedSeverity),
                     eventData.probableCause, fromDB.getRU(eventData.probableCause), eventData.specificProblem, eventData.alarmDetails, eventData.alarmRaisedTime, eventState_Id, hasTCA, createUserLogin);
                     eventData.eventId = sqlQueryResult;
-                    eventData.incomingMessage = jsonString;
-                   
-                    return Ok (eventData);
+                    // eventData.incomingMessage = jsonString;
+
+                    return Ok(eventData);
                 }
             }
             else

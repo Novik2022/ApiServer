@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text.Json;
-using System.Web;
+using ApiServer.Controllers;
 using Npgsql;
 
 namespace ApiServer
@@ -13,7 +9,7 @@ namespace ApiServer
         //Reason НАЧАЛО
         public string setReason(int Reason_Id, int Inc_id)
         {
-            string reason = "";
+            //string reason = "";
             string Host = "mobile.demo.transset.ru";
             string User = "postgres";
             string DBname = "mobile";
@@ -80,7 +76,7 @@ namespace ApiServer
             DateTime WorkStartTime, Int32 Coordinator_Id, DateTime WorkCompleteTime, DateTime ClosedTime, TimeSpan Duration,
             string Result, Int32 Solution_Id, int[] WorkExecutors, bool NeedApproving, DateTime DurationStartDate, DateTime FirstStageUsedInElapsedTime, string CreateUserLogin, string UpdateUserLogin, string DeleteUserLogin, DateTime CreateDate, DateTime UpdateDate, DateTime DeleteDate)
         {
-            const string q = "'\u0022'";
+            //const string q = "'\u0022'";
             string Host = "mobile.demo.transset.ru";
             string User = "postgres";
             string DBname = "itsm";
@@ -184,8 +180,9 @@ namespace ApiServer
 
             var command = new NpgsqlCommand(sqlQuery, conn);
             var query = command.ExecuteNonQuery();
-            return sWorkStartTime;
             conn.Close();
+            return sWorkStartTime;
+            
         }
         //Обновить ЛР ЗИ КОНЕЦ
 
@@ -198,11 +195,11 @@ namespace ApiServer
             string sqlQuery          = string.Empty;
             string sWorkStartTime    = string.Empty;
             string sWorkCompleteTime = string.Empty;
-            string Host = "stack.transset.ru";
-            string User = "postgres";
-            string DBname   = "dev";
-            string Password = "123";
-            string Port     = "30044";
+            string Host     = ConnectionSettings.eHost;
+            string User     = ConnectionSettings.eUser;
+            string DBname   = ConnectionSettings.eDBname;
+            string Password = ConnectionSettings.ePassword;
+            string Port     = ConnectionSettings.ePort;
 
             string connString =
                 String.Format(
@@ -257,14 +254,15 @@ namespace ApiServer
                 int eventId = reader.GetInt32(0);
                 return eventId;
             }
-            return 0;
             reader.Close();
             conn.Close();
+            return 0;           
+            
         }
             //Создать СОБЫТИЕ КОНЕЦ
 
             //Закрыть СОБЫТИЕ НАЧАЛО
-           public int alarmClear(DateTime alarmClearedTime, string clearUserLogin, string clearSystem)
+          /* public int alarmClear(DateTime alarmClearedTime, string clearUserLogin, string clearSystem)
             {
                 string sqlQuery          = string.Empty;
                 string sWorkStartTime    = string.Empty;
@@ -288,7 +286,7 @@ namespace ApiServer
 
 
 
-            }
+            }*/
             //Закрыть СОБЫТИЕ КОНЕЦ
         
 
